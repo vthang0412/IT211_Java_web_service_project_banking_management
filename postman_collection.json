@@ -1,0 +1,355 @@
+{
+  "info": {
+    "_postman_id": "d1f8b9b0-0000-4000-8000-000000000001",
+    "name": "Rikkei Bank - API Tests",
+    "description": "**HTTP Status Code Standard**\n\n- 200 OK: Truy vấn/Cập nhật thành công.\n- 201 Created: Tạo mới thành công.\n- 204 No Content: Xóa thành công.\n- 400 Bad Request: Validation thất bại.\n- 401 Unauthorized: Thiếu/Sai Token.\n- 403 Forbidden: Không đủ quyền truy cập.\n- 409 Conflict: Xung đột nghiệp vụ (VD: Số dư không đủ để chuyển khoản).\n- 500 Internal Server Error: Lỗi hệ thống bất ngờ.\n",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth - Login (Admin)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"123456\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/auth/login",
+          "host": ["{{baseUrl}}"],
+          "path": ["api","v1","auth","login"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Auth login should return 200 OK', function () { pm.expect(pm.response.code, 'Auth login failed').to.eql(200); });",
+              "const body = pm.response.json();",
+              "pm.test('Auth login response should follow ApiResponse format', function(){ pm.expect(body, 'Login response missing success flag').to.have.property('success'); pm.expect(body, 'Login response missing message').to.have.property('message'); pm.expect(body, 'Login response missing data object').to.have.property('data'); pm.expect(body.success, 'Login response success must be true').to.eql(true); pm.expect(body.message, 'Login success message mismatch').to.eql('Login successfully'); pm.expect(body.data, 'Login response missing accessToken').to.have.property('accessToken'); pm.expect(body.data, 'Login response missing refreshToken').to.have.property('refreshToken'); });",
+              "pm.environment.set('accessToken', body.data.accessToken);",
+              "pm.environment.set('refreshToken', body.data.refreshToken);",
+              "pm.environment.set('accessToken_admin', body.data.accessToken);",
+              "pm.environment.set('refreshToken_admin', body.data.refreshToken);"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Auth - Login (Staff)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"staff\",\n  \"password\": \"123456\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/auth/login",
+          "host": ["{{baseUrl}}"],
+          "path": ["api","v1","auth","login"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Auth login should return 200 OK', function () { pm.expect(pm.response.code, 'Auth login failed').to.eql(200); });",
+              "const body = pm.response.json();",
+              "pm.test('Auth login response should follow ApiResponse format', function(){ pm.expect(body, 'Login response missing success flag').to.have.property('success'); pm.expect(body, 'Login response missing message').to.have.property('message'); pm.expect(body, 'Login response missing data object').to.have.property('data'); pm.expect(body.success, 'Login response success must be true').to.eql(true); pm.expect(body.message, 'Login success message mismatch').to.eql('Login successfully'); pm.expect(body.data, 'Login response missing accessToken').to.have.property('accessToken'); pm.expect(body.data, 'Login response missing refreshToken').to.have.property('refreshToken'); });",
+              "pm.environment.set('accessToken_staff', body.data.accessToken);",
+              "pm.environment.set('accessToken', body.data.accessToken);",
+              "pm.environment.set('refreshToken_staff', body.data.refreshToken);"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Auth - Login (Customer)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"customer\",\n  \"password\": \"123456\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/auth/login",
+          "host": ["{{baseUrl}}"],
+          "path": ["api","v1","auth","login"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Auth login should return 200 OK', function () { pm.expect(pm.response.code, 'Auth login failed').to.eql(200); });",
+              "const body = pm.response.json();",
+              "pm.test('Auth login response should follow ApiResponse format', function(){ pm.expect(body, 'Login response missing success flag').to.have.property('success'); pm.expect(body, 'Login response missing message').to.have.property('message'); pm.expect(body, 'Login response missing data object').to.have.property('data'); pm.expect(body.success, 'Login response success must be true').to.eql(true); pm.expect(body.message, 'Login success message mismatch').to.eql('Login successfully'); pm.expect(body.data, 'Login response missing accessToken').to.have.property('accessToken'); pm.expect(body.data, 'Login response missing refreshToken').to.have.property('refreshToken'); });",
+              "pm.environment.set('accessToken', body.data.accessToken);",
+              "pm.environment.set('refreshToken_customer', body.data.refreshToken);",
+              "pm.environment.set('accessToken_customer', body.data.accessToken);"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Auth - Register (FR-04)",
+      "request": {
+        "method": "POST",
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            { "key": "username", "type": "text", "value": "customer_register_01" },
+            { "key": "password", "type": "text", "value": "12345678" },
+            { "key": "email", "type": "text", "value": "customer_register_01@gmail.com" },
+            { "key": "phoneNumber", "type": "text", "value": "0901234567" },
+            { "key": "fullName", "type": "text", "value": "Nguyen Van A" },
+            { "key": "idNumber", "type": "text", "value": "012345678901" },
+            { "key": "file", "type": "file", "src": "{{kycFilePath}}" }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/auth/register",
+          "host": ["{{baseUrl}}"],
+          "path": ["api","v1","auth","register"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Auth register should return 201 Created', function () { pm.expect(pm.response.code, 'Auth register failed').to.eql(201); });",
+              "const body = pm.response.json();",
+              "pm.test('Auth register response should follow ApiResponse format', function(){ pm.expect(body, 'Register response missing success flag').to.have.property('success'); pm.expect(body, 'Register response missing message').to.have.property('message'); pm.expect(body, 'Register response missing data object').to.have.property('data'); pm.expect(body.success, 'Register response success must be true').to.eql(true); pm.expect(body.message, 'Register success message mismatch').to.eql('Registration submitted successfully'); pm.expect(body.data, 'Register response missing userId').to.have.property('userId'); pm.expect(body.data, 'Register response missing kycId').to.have.property('kycId'); pm.expect(body.data, 'Register response missing kycStatus').to.have.property('kycStatus'); pm.expect(body.data.kycStatus, 'New KYC should be PENDING').to.eql('PENDING'); });",
+              "pm.environment.set('registeredUserId', body.data.userId);",
+              "pm.environment.set('registeredUsername', body.data.username);",
+              "pm.environment.set('registeredEmail', body.data.email);",
+              "pm.environment.set('kycId', body.data.kycId);"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Auth - Refresh Token",
+      "request": {
+        "method": "POST",
+        "header": [ { "key": "Content-Type", "value": "application/json" } ],
+        "body": { "mode": "raw", "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}" },
+        "url": { "raw": "{{baseUrl}}/api/v1/auth/refresh", "host": ["{{baseUrl}}"], "path": ["api","v1","auth","refresh"] }
+      },
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "// Ensure a refreshToken variable exists (prefer admin)",
+              "if(!pm.environment.get('refreshToken')){",
+              "  var rt = pm.environment.get('refreshToken_admin') || pm.environment.get('refreshToken_staff') || pm.environment.get('refreshToken_customer');",
+              "  if(rt){ pm.environment.set('refreshToken', rt); }",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Refresh token should return 200 OK', function () { pm.expect(pm.response.code, 'Refresh token failed').to.eql(200); });",
+              "try { const b = pm.response.json(); pm.test('Refresh token response should follow ApiResponse format', function(){ pm.expect(b, 'Refresh token response missing success flag').to.have.property('success'); pm.expect(b, 'Refresh token response missing message').to.have.property('message'); pm.expect(b, 'Refresh token response missing data object').to.have.property('data'); pm.expect(b.success, 'Refresh token success must be true').to.eql(true); pm.expect(b.message, 'Refresh token message mismatch').to.eql('Token refreshed successfully'); pm.expect(b.data, 'Refresh token response missing accessToken').to.have.property('accessToken'); }); if(b.data && b.data.accessToken){ pm.environment.set('accessToken', b.data.accessToken); } } catch(e){ pm.test('Refresh token response should be valid JSON', ()=>{ throw new Error('Invalid JSON response: ' + e.message); }); }"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Auth - Logout",
+      "request": {
+        "method": "POST",
+        "header": [ { "key": "Authorization", "value": "Bearer {{accessToken}}" } ],
+        "url": { "raw": "{{baseUrl}}/api/v1/auth/logout", "host": ["{{baseUrl}}"], "path": ["api","v1","auth","logout"] }
+      },
+      "event": [ { "listen": "test", "script": { "exec": [ "pm.test('Logout should return 200 OK', function () { pm.expect(pm.response.code, 'Logout failed').to.eql(200); });", "const body = pm.response.json();", "pm.test('Logout response should follow ApiResponse format', function(){ pm.expect(body, 'Logout response missing success flag').to.have.property('success'); pm.expect(body, 'Logout response missing message').to.have.property('message'); pm.expect(body, 'Logout response missing data').to.have.property('data'); pm.expect(body.success, 'Logout success must be true').to.eql(true); pm.expect(body.message, 'Logout success message mismatch').to.eql('Logout successfully'); pm.expect(body.data, 'Logout data must be null').to.eql(null); });", "// Optionally clear accessToken after logout\npm.environment.unset('accessToken');" ], "type": "text/javascript" } } ]
+    },
+    {
+      "name": "Admin - Get All Users",
+      "request": {
+        "method": "GET",
+        "header": [ { "key": "Authorization", "value": "Bearer {{accessToken_admin}}" } ],
+        "url": { "raw": "{{baseUrl}}/api/v1/users?page=0&size=10", "host": ["{{baseUrl}}"], "path": ["api","v1","users"], "query": [ { "key": "page", "value": "0" }, { "key": "size", "value": "10" } ] }
+      },
+      "event": [ { "listen": "test", "script": { "exec": [ "pm.test('Admin get all users should return 200 OK', function () { pm.expect(pm.response.code, 'Get all users failed').to.eql(200); });", "const body = pm.response.json();", "pm.test('Get all users response should follow ApiResponse format', function(){ pm.expect(body, 'Response missing success flag').to.have.property('success'); pm.expect(body, 'Response missing message').to.have.property('message'); pm.expect(body, 'Response missing data object').to.have.property('data'); pm.expect(body.success, 'Success must be true').to.eql(true); pm.expect(body.message, 'Message mismatch').to.eql('Users retrieved successfully'); pm.expect(body.data, 'Paged user data missing content').to.have.property('content'); pm.expect(body.data.content, 'User content should be an array').to.be.an('array'); });" ], "type": "text/javascript" } } ]
+    },
+    {
+      "name": "Admin - Get User By Id",
+      "request": {
+        "method": "GET",
+        "header": [ { "key": "Authorization", "value": "Bearer {{accessToken_admin}}" } ],
+        "url": { "raw": "{{baseUrl}}/api/v1/users/1", "host": ["{{baseUrl}}"], "path": ["api","v1","users","1"] }
+      },
+      "event": [ { "listen": "test", "script": { "exec": [ "pm.test('Admin get user by id should return 200 OK', function () { pm.expect(pm.response.code, 'Get user by id failed').to.eql(200); });", "const body = pm.response.json();", "pm.test('Get user by id response should follow ApiResponse format', function(){ pm.expect(body, 'Response missing success flag').to.have.property('success'); pm.expect(body, 'Response missing message').to.have.property('message'); pm.expect(body, 'Response missing data object').to.have.property('data'); pm.expect(body.success, 'Success must be true').to.eql(true); pm.expect(body.message, 'Message mismatch').to.eql('User retrieved successfully'); pm.expect(body.data, 'User data missing id').to.have.property('id'); });" ], "type": "text/javascript" } } ]
+    },
+    {
+      "name": "Admin - Create User",
+      "request": {
+        "method": "POST",
+        "header": [ { "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{accessToken_admin}}" } ],
+        "body": { "mode": "raw", "raw": "{\n  \"username\": \"customer2\",\n  \"password\": \"123456\",\n  \"email\": \"customer2@gmail.com\",\n  \"phoneNumber\": \"0909999999\",\n  \"roleId\": 3\n}" },
+        "url": { "raw": "{{baseUrl}}/api/v1/users", "host": ["{{baseUrl}}"], "path": ["api","v1","users"] }
+      },
+      "event": [ { "listen": "test", "script": { "exec": [ "pm.test('Admin create user should return 200 or 201', function () { pm.expect(pm.response.code, 'Create user returned unexpected status').to.be.oneOf([200,201]); });", "const body = pm.response.json();", "pm.test('Create user response should follow ApiResponse format', function(){ pm.expect(body, 'Response missing success flag').to.have.property('success'); pm.expect(body, 'Response missing message').to.have.property('message'); pm.expect(body, 'Response missing data object').to.have.property('data'); pm.expect(body.success, 'Success must be true').to.eql(true); pm.expect(body.message, 'Create user message mismatch').to.eql('Created successfully'); pm.expect(body.data, 'Created user data missing id').to.have.property('id'); });" ], "type": "text/javascript" } } ]
+    },
+    {
+      "name": "Admin - Update User",
+      "request": {
+        "method": "PUT",
+        "header": [ { "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{accessToken_admin}}" } ],
+        "body": { "mode": "raw", "raw": "{\n  \"email\": \"updated@example.com\",\n  \"phoneNumber\": \"0901111222\",\n  \"isActive\": true\n}" },
+        "url": { "raw": "{{baseUrl}}/api/v1/users/1", "host": ["{{baseUrl}}"], "path": ["api","v1","users","1"] }
+      },
+      "event": [ { "listen": "test", "script": { "exec": [ "pm.test('Admin update user should return 200 OK', function () { pm.expect(pm.response.code, 'Update user failed').to.eql(200); });", "const body = pm.response.json();", "pm.test('Update user response should follow ApiResponse format', function(){ pm.expect(body, 'Response missing success flag').to.have.property('success'); pm.expect(body, 'Response missing message').to.have.property('message'); pm.expect(body, 'Response missing data object').to.have.property('data'); pm.expect(body.success, 'Success must be true').to.eql(true); pm.expect(body.message, 'Update user message mismatch').to.eql('User updated successfully'); });" ], "type": "text/javascript" } } ]
+    },
+    {
+      "name": "Admin - Delete User",
+      "request": {
+        "method": "DELETE",
+        "header": [ { "key": "Authorization", "value": "Bearer {{accessToken_admin}}" } ],
+        "url": { "raw": "{{baseUrl}}/api/v1/users/5", "host": ["{{baseUrl}}"], "path": ["api","v1","users","5"] }
+      },
+      "event": [ { "listen": "test", "script": { "exec": [ "pm.test('Admin delete user should return 200 or 204', function () { pm.expect(pm.response.code, 'Delete user returned unexpected status').to.be.oneOf([200,204]); });", "const body = pm.response.json();", "pm.test('Delete user response should follow ApiResponse format', function(){ pm.expect(body, 'Response missing success flag').to.have.property('success'); pm.expect(body, 'Response missing message').to.have.property('message'); pm.expect(body, 'Response missing data object').to.have.property('data'); pm.expect(body.success, 'Success must be true').to.eql(true); pm.expect(body.message, 'Delete user message mismatch').to.eql('User deleted successfully'); pm.expect(body.data, 'Delete user data must be null').to.eql(null); });" ], "type": "text/javascript" } } ]
+    },
+    {
+      "name": "Staff - Get All Users",
+      "request": {
+        "method": "GET",
+        "header": [ { "key": "Authorization", "value": "Bearer {{accessToken_staff}}" } ],
+        "url": { "raw": "{{baseUrl}}/api/v1/staff/users?page=0&size=10", "host": ["{{baseUrl}}"], "path": ["api","v1","staff","users"], "query": [ { "key": "page", "value": "0" }, { "key": "size", "value": "10" } ] }
+      },
+      "event": [ { "listen": "test", "script": { "exec": [ "pm.test('Staff get all users should return 200 OK', function () { pm.expect(pm.response.code, 'Staff get all users failed').to.eql(200); });", "const body = pm.response.json();", "pm.test('Staff get all users response should follow ApiResponse format', function(){ pm.expect(body, 'Response missing success flag').to.have.property('success'); pm.expect(body, 'Response missing message').to.have.property('message'); pm.expect(body, 'Response missing data object').to.have.property('data'); pm.expect(body.success, 'Success must be true').to.eql(true); pm.expect(body.message, 'Message mismatch').to.eql('Users retrieved successfully'); pm.expect(body.data, 'Paged user data missing content').to.have.property('content'); });" ], "type": "text/javascript" } } ]
+    },
+    {
+      "name": "Staff - Approve KYC",
+      "request": {
+        "method": "PUT",
+        "header": [ { "key": "Authorization", "value": "Bearer {{accessToken_staff}}" } ],
+        "url": { "raw": "{{baseUrl}}/api/v1/kyc/{{kycId}}/approve", "host": ["{{baseUrl}}"], "path": ["api","v1","kyc","{{kycId}}","approve"] }
+      },
+      "event": [ { "listen": "test", "script": { "exec": [ "pm.test('Staff approve KYC should return 200 OK', function () { pm.expect(pm.response.code, 'Approve KYC failed').to.eql(200); });", "const body = pm.response.json();", "pm.test('Approve KYC response should follow ApiResponse format', function(){ pm.expect(body, 'Response missing success flag').to.have.property('success'); pm.expect(body, 'Response missing message').to.have.property('message'); pm.expect(body, 'Response missing data').to.have.property('data'); pm.expect(body.success, 'Success must be true').to.eql(true); pm.expect(body.message, 'Approve message mismatch').to.eql('KYC approved successfully'); pm.expect(body.data, 'Approve KYC data must be null').to.eql(null); });" ], "type": "text/javascript" } } ]
+    },
+    {
+      "name": "Staff - Reject KYC",
+      "request": {
+        "method": "PUT",
+        "header": [ { "key": "Authorization", "value": "Bearer {{accessToken_staff}}" } ],
+        "url": { "raw": "{{baseUrl}}/api/v1/kyc/{{kycId}}/reject", "host": ["{{baseUrl}}"], "path": ["api","v1","kyc","{{kycId}}","reject"] }
+      },
+      "event": [ { "listen": "test", "script": { "exec": [ "pm.test('Staff reject KYC should return 200 OK', function () { pm.expect(pm.response.code, 'Reject KYC failed').to.eql(200); });", "const body = pm.response.json();", "pm.test('Reject KYC response should follow ApiResponse format', function(){ pm.expect(body, 'Response missing success flag').to.have.property('success'); pm.expect(body, 'Response missing message').to.have.property('message'); pm.expect(body, 'Response missing data').to.have.property('data'); pm.expect(body.success, 'Success must be true').to.eql(true); pm.expect(body.message, 'Reject message mismatch').to.eql('KYC rejected successfully'); pm.expect(body.data, 'Reject KYC data must be null').to.eql(null); });" ], "type": "text/javascript" } } ]
+    },
+    {
+      "name": "Customer - Upload KYC",
+      "request": {
+        "method": "POST",
+        "header": [ { "key": "Authorization", "value": "Bearer {{accessToken_customer}}" } ],
+        "body": { "mode": "formdata", "formdata": [ { "key": "file", "type": "file", "src": "" }, { "key": "fullName", "type": "text", "value": "Nguyen Van A" }, { "key": "idNumber", "type": "text", "value": "012345678" } ] },
+        "url": { "raw": "{{baseUrl}}/api/v1/kyc/upload", "host": ["{{baseUrl}}"], "path": ["api","v1","kyc","upload"] }
+      },
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "// Ensure customer token exists; mark test fail if missing but don't throw",
+              "pm.test('Customer token should exist before KYC upload', function(){ pm.expect(pm.environment.get('accessToken_customer'), 'accessToken_customer is missing').to.not.be.undefined; });"
+            ],
+            "type": "text/javascript"
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Customer KYC upload should return 200 OK', function () { pm.expect(pm.response.code, 'KYC upload failed').to.eql(200); });",
+              "try { const b = pm.response.json(); pm.test('KYC upload response should follow ApiResponse format', function(){ pm.expect(b, 'Response missing success flag').to.have.property('success'); pm.expect(b, 'Response missing message').to.have.property('message'); pm.expect(b, 'Response missing data object').to.have.property('data'); pm.expect(b.success, 'Success must be true').to.eql(true); pm.expect(b.message, 'KYC upload message mismatch').to.eql('KYC uploaded successfully'); }); if(b.data && b.data.id){ pm.environment.set('kycId', b.data.id); } } catch(e){ pm.test('KYC upload response should be valid JSON', ()=>{ throw new Error('Invalid JSON response: ' + e.message); }); }"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Customer - Get Balance",
+      "request": {
+        "method": "GET",
+        "header": [ { "key": "Authorization", "value": "Bearer {{accessToken_customer}}" } ],
+        "url": { "raw": "{{baseUrl}}/api/v1/customer/accounts/1/balance", "host": ["{{baseUrl}}"], "path": ["api","v1","customer","accounts","1","balance"] }
+      },
+      "event": [ { "listen": "test", "script": { "exec": [ "pm.test('Customer get balance should return 200 OK', function () { pm.expect(pm.response.code, 'Get balance failed').to.eql(200); });", "const body = pm.response.json();", "pm.test('Get balance response should follow ApiResponse format', function(){ pm.expect(body, 'Response missing success flag').to.have.property('success'); pm.expect(body, 'Response missing message').to.have.property('message'); pm.expect(body, 'Response missing data').to.have.property('data'); pm.expect(body.success, 'Success must be true').to.eql(true); pm.expect(body.message, 'Balance message mismatch').to.eql('Balance retrieved successfully'); pm.expect(body.data, 'Balance response is not numeric').to.be.a('number'); pm.expect(body.data, 'Balance must be non-negative').to.be.at.least(0); });" ], "type": "text/javascript" } } ]
+    },
+    {
+      "name": "Customer - Change PIN",
+      "request": {
+        "method": "PUT",
+        "header": [ { "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{accessToken_customer}}" } ],
+        "body": { "mode": "raw", "raw": "{\n  \"oldPin\": \"123456\",\n  \"newPin\": \"654321\"\n}" },
+        "url": { "raw": "{{baseUrl}}/api/v1/customer/accounts/1/change-pin", "host": ["{{baseUrl}}"], "path": ["api","v1","customer","accounts","1","change-pin"] }
+      },
+      "event": [ { "listen": "test", "script": { "exec": [ "pm.test('Customer change PIN should return 200 OK', function () { pm.expect(pm.response.code, 'Change PIN failed').to.eql(200); });", "const body = pm.response.json();", "pm.test('Change PIN response should follow ApiResponse format', function(){ pm.expect(body, 'Response missing success flag').to.have.property('success'); pm.expect(body, 'Response missing message').to.have.property('message'); pm.expect(body, 'Response missing data').to.have.property('data'); pm.expect(body.success, 'Success must be true').to.eql(true); pm.expect(body.message, 'Change PIN message mismatch').to.eql('PIN changed successfully'); pm.expect(body.data, 'Change PIN data must be null').to.eql(null); });" ], "type": "text/javascript" } } ]
+    },
+    {
+      "name": "Customer - Transfer",
+      "request": {
+        "method": "POST",
+        "header": [ { "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{accessToken_customer}}" } ],
+        "body": { "mode": "raw", "raw": "{\n  \"fromAccountId\": 1,\n  \"toAccountId\": 2,\n  \"amount\": 100000\n}" },
+        "url": { "raw": "{{baseUrl}}/api/v1/customer/transactions/transfer", "host": ["{{baseUrl}}"], "path": ["api","v1","customer","transactions","transfer"] }
+      },
+      "event": [ { "listen": "test", "script": { "exec": [ "pm.test('Customer transfer should return 200 OK', function () { pm.expect(pm.response.code, 'Transfer failed').to.eql(200); });", "try { const b = pm.response.json(); pm.test('Transfer response should follow ApiResponse format', () => { pm.expect(b, 'Transfer response missing success flag').to.have.property('success'); pm.expect(b, 'Transfer response missing message').to.have.property('message'); pm.expect(b, 'Transfer response missing data').to.have.property('data'); pm.expect(b.success, 'Transfer response success must be true').to.equal(true); pm.expect(b.message, 'Transfer success message mismatch').to.eql('Transfer successfully'); }); } catch(e){ pm.test('Transfer response should be valid JSON', () => { throw new Error('Invalid JSON response: ' + e.message); }); }" ], "type": "text/javascript" } } ]
+    },
+    {
+      "name": "Customer - Transaction History",
+      "request": {
+        "method": "GET",
+        "header": [ { "key": "Authorization", "value": "Bearer {{accessToken_customer}}" } ],
+        "url": { "raw": "{{baseUrl}}/api/v1/customer/transactions/history?accountId=1&page=0&size=10", "host": ["{{baseUrl}}"], "path": ["api","v1","customer","transactions","history"], "query": [ { "key": "accountId", "value": "1" }, { "key": "page", "value": "0" }, { "key": "size", "value": "10" } ] }
+      },
+      "event": [ { "listen": "test", "script": { "exec": [ "pm.test('Customer transaction history should return 200 OK', function () { pm.expect(pm.response.code, 'Transaction history failed').to.eql(200); });", "const body = pm.response.json();", "pm.test('Transaction history response should follow ApiResponse format', () => { pm.expect(body, 'Response missing success flag').to.have.property('success'); pm.expect(body, 'Response missing message').to.have.property('message'); pm.expect(body, 'Response missing data').to.have.property('data'); pm.expect(body.success, 'Success must be true').to.eql(true); pm.expect(body.message, 'History message mismatch').to.eql('Transaction history retrieved successfully'); pm.expect(body.data, 'History data should contain content').to.have.property('content'); pm.expect(body.data.content, 'History content should be an array').to.be.an('array'); });" ], "type": "text/javascript" } } ]
+    }
+  ],
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080" },
+    { "key": "accessToken", "value": "" },
+    { "key": "refreshToken", "value": "" },
+    { "key": "accessToken_staff", "value": "" },
+    { "key": "accessToken_admin", "value": "" },
+    { "key": "refreshToken_admin", "value": "" },
+    { "key": "accessToken_customer", "value": "" },
+    { "key": "refreshToken_customer", "value": "" },
+    { "key": "refreshToken_staff", "value": "" },
+    { "key": "kycFilePath", "value": "" },
+    { "key": "registeredUserId", "value": "" },
+    { "key": "registeredUsername", "value": "" },
+    { "key": "registeredEmail", "value": "" },
+    { "key": "kycId", "value": "" }
+  ]
+}
